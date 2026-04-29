@@ -14,7 +14,7 @@ ImpactUp 3팀 테일즈런너 리포지토리입니다.
 - **AI:** Gemini API, Google Cloud Translation API, Imagen
 
 ## 📊 Database ERD
-![ERD Diagram](./images/erd_diagram.png)
+![ERD Diagram](./images/ERD.png)
 
 ## 🚀 주요 기능
 - 부모-자녀 대화 기반 스토리 생성
