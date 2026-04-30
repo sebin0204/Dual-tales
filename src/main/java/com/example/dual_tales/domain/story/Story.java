@@ -22,6 +22,10 @@ public class Story {
     private String title;
     private String targetLangCode; //모국어 코드(ex: en, vi 등)
     private String status;
+    private int targetAge;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private boolean isPublic = true;
 }
