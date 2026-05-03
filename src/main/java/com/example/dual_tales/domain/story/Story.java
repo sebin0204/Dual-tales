@@ -1,11 +1,14 @@
 package com.example.dual_tales.domain.story;
 
+import com.example.dual_tales.domain.story_content.StoryContent;
 import com.example.dual_tales.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -25,6 +28,10 @@ public class Story {
     private int targetAge;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    //mappedBY = "story" : StoryContent 엔티티에 있는 'story' 필드에 의해 관리된다
+    @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StoryContent> content = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean isPublic = true;

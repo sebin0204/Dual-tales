@@ -1,4 +1,4 @@
-package com.example.dual_tales.api.service.dto;
+package com.example.dual_tales.api.story.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.dual_tales.api.service.dto;
+package com.example.dual_tales.api.story.dto;
 
 import com.example.dual_tales.domain.story.Story;
 import lombok.Getter;
