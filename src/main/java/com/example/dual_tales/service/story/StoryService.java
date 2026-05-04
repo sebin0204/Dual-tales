@@ -1,9 +1,13 @@
 package com.example.dual_tales.service.story;
 
+import com.example.dual_tales.api.story.dto.StoryCreateRequestDto;
 import com.example.dual_tales.api.story.dto.StoryDetailResponseDto;
 import com.example.dual_tales.api.story.dto.StoryResponseDto;
 import com.example.dual_tales.domain.story.Story;
 import com.example.dual_tales.domain.story.StoryRepository;
+import com.example.dual_tales.domain.story_content.StoryContent;
+import com.example.dual_tales.domain.story_content.StoryContentRepository;
+import com.example.dual_tales.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +19,38 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor //자동 생성자 주입 어노테이션 (의존성 주입 중 하나)
 public class StoryService {
     private final StoryRepository storyRepository;
+    private final StoryContentRepository storyContentRepository;
+
+    //동화 생성
+    @Transactional
+    public Long createStory(User user, StoryCreateRequestDto requestDto) {
+        //1. 부모엔티티(Story) 생성 및 저장
+        Story story = Story.builder()
+                .user(user)
+                .title(requestDto.getTitle())
+                .targetLangCode(requestDto.getTargetLangCode())
+                .targetAge(requestDto.getTargetAge())
+                .status("COMPLETED")
+                .isPublic(true)
+                .build();
+
+        Story savedStory = storyRepository.save(story);
+
+        //2. 자식 엔티티(StoryContent) 리스트 생성 및 저장
+        List<StoryContent> contents = requestDto.getContents().stream()
+                .map(dto ->StoryContent.builder()
+                        .story(savedStory)
+                        .sequence(dto.getSequence())
+                        .content_ko(dto.getContent_ko())
+                        .content_foreign(dto.getContent_foreign())
+                        .image_url(dto.getImage_url())
+                        .build())
+                .toList();
+
+        storyContentRepository.saveAll(contents);
+
+        return savedStory.getId();
+    }
 
     //내 동화 목록 조회
     @Transactional(readOnly = true)

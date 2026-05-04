@@ -1,11 +1,15 @@
 package com.example.dual_tales.api.story;
 
+import com.example.dual_tales.api.story.dto.StoryCreateRequestDto;
 import com.example.dual_tales.api.story.dto.StoryDetailResponseDto;
 import com.example.dual_tales.api.story.dto.StoryResponseDto;
+import com.example.dual_tales.domain.user.User;
 import com.example.dual_tales.service.story.StoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +21,23 @@ import java.util.List;
 public class StoryController {
     private final StoryService storyService;
 
+    //POST : 동화 생성
+    //1. 최종 생성된 동화 저장
+    @PostMapping
+    @Operation(summary = "동화 생성", description = "AI가 완성한 동화 내용을 DB에 최종 저장합니다.")
+    public ResponseEntity<Long> createStory(
+            @AuthenticationPrincipal User user, //로그인한 유저 정보
+            @RequestBody StoryCreateRequestDto requestDto) {
+
+        Long storyId = storyService.createStory(user, requestDto);
+        return ResponseEntity.ok(storyId);
+    }
+
     //GET: 내 동화 목록 조회
     @GetMapping("/my")
     @Operation(summary = "내 동화 목록 조회", description = "내가 작성한 동화 리스트를 최신순으로 조회합니다.")
-    public List<StoryResponseDto> getMyStories() {
-        //테스트를 위해 임시로 1번 유저 데이터 가져오게 설정
-        Long tempUserId = 1L;
-        return storyService.getMyStories(tempUserId);
+    public List<StoryResponseDto> getMyStories(@AuthenticationPrincipal User user) {
+        return storyService.getMyStories(user.getId());
     }
 
     //GET: 동화 상세 조회

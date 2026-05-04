@@ -2,12 +2,14 @@ package com.example.dual_tales.domain.story_content;
 
 import com.example.dual_tales.domain.story.Story;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StoryContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

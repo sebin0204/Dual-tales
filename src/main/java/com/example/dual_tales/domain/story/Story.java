@@ -3,8 +3,9 @@ package com.example.dual_tales.domain.story;
 import com.example.dual_tales.domain.story_content.StoryContent;
 import com.example.dual_tales.domain.user.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +13,10 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Story {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +32,8 @@ public class Story {
     private String status;
     private int targetAge;
 
+    @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     //mappedBY = "story" : StoryContent 엔티티에 있는 'story' 필드에 의해 관리된다
