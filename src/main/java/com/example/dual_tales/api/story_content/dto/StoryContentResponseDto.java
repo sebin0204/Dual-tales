@@ -6,7 +6,8 @@ import lombok.Getter;
 @Getter
 public class StoryContentResponseDto {
     private int sequence;
-    private String question;
+    private String question_ko;
+    private String question_foreign;
     private String answer;
     private String content_ko;
     private String content_foreign;
@@ -14,7 +15,8 @@ public class StoryContentResponseDto {
 
     public StoryContentResponseDto(StoryContent content) {
         this.sequence = content.getSequence();
-        this.question = content.getQuestion();
+        this.question_ko = content.getQuestion_ko();
+        this.question_foreign = content.getQuestion_foreign();
         this.answer = content.getAnswer();
         this.content_ko = content.getContent_ko();
         this.content_foreign = content.getContent_foreign();

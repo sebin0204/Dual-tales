@@ -11,6 +11,7 @@ public class StoryResponseDto {
     private String title;
     private String targetLangCode;
     private int targetAge;
+    private int page_count;
     private LocalDateTime createdAt;
     private String nickname;
 
@@ -19,6 +20,7 @@ public class StoryResponseDto {
         this.title = story.getTitle();
         this.targetLangCode = story.getTargetLangCode();
         this.targetAge = story.getTargetAge();
+        this.page_count = story.getPage_count();
         this.createdAt = story.getCreatedAt();
         this.nickname = story.getUser().getNickname();
 

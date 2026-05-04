@@ -22,7 +22,10 @@ public class StoryContent {
     private int sequence; //페이지 번호
 
     @Column(columnDefinition = "TEXT")
-    private String question;
+    private String question_ko;
+
+    @Column(columnDefinition = "TEXT")
+    private String question_foreign;
 
     @Column(columnDefinition = "TEXT")
     private String answer;

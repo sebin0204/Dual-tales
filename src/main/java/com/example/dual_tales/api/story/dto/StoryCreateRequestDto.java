@@ -11,8 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 public class StoryCreateRequestDto {
     private String title;
+    @JsonProperty("target_lang_code")
     private String targetLangCode;
+    @JsonProperty("target_age")
     private int targetAge;
+    @JsonProperty("page_count")
+    private int page_count;
+    @JsonProperty("contents")
     private List<ContentDto> contents;
 
     @Getter

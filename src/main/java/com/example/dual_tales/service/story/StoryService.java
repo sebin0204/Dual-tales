@@ -30,6 +30,7 @@ public class StoryService {
                 .title(requestDto.getTitle())
                 .targetLangCode(requestDto.getTargetLangCode())
                 .targetAge(requestDto.getTargetAge())
+                .page_count(requestDto.getPage_count())
                 .status("COMPLETED")
                 .isPublic(true)
                 .build();

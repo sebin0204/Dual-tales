@@ -32,6 +32,8 @@ public class Story {
     private String status;
     private int targetAge;
 
+    private Integer page_count;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
