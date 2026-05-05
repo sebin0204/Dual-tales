@@ -30,7 +30,7 @@ public class StoryService {
                 .title(requestDto.getTitle())
                 .targetLangCode(requestDto.getTargetLangCode())
                 .targetAge(requestDto.getTargetAge())
-                .page_count(requestDto.getPage_count())
+                .page_count(requestDto.getPageCount())
                 .status("COMPLETED")
                 .isPublic(true)
                 .build();
@@ -51,6 +51,46 @@ public class StoryService {
         storyContentRepository.saveAll(contents);
 
         return savedStory.getId();
+    }
+
+    //동화 삭제
+    @Transactional
+    public void deleteStory(Long userId, Long storyId) {
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(()->new IllegalArgumentException("해당 동화를 찾을 수 없습니다."));
+
+        //본인 확인 로직
+        if(!story.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("자신의 동화만 삭제 가능합니다.");
+        }
+
+        storyRepository.delete(story);
+    }
+
+    //동화 제목 수정
+    @Transactional
+    public void updateStoryTitle(Long userId, Long storyId, String newTitle) {
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(()->new IllegalArgumentException("해당 동화를 찾을 수 없습니다."));
+
+        if(!story.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("자신의 동화만 수정 가능합니다.");
+        }
+
+        story.setTitle(newTitle);
+    }
+
+    //동화 공개/비공개 상태 전환
+    @Transactional
+    public void toggleStoryPublic(Long userId, Long storyId) {
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(()->new IllegalArgumentException("해당 동화를 찾을 수 없습니다."));
+
+        if(!story.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("자신의 동화만 수정 가능합니다.");
+        }
+
+        story.setPublic(!story.isPublic()); //현재 상태 반전
     }
 
     //내 동화 목록 조회

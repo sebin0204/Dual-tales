@@ -16,7 +16,7 @@ public class StoryCreateRequestDto {
     @JsonProperty("target_age")
     private int targetAge;
     @JsonProperty("page_count")
-    private int page_count;
+    private int pageCount;
     @JsonProperty("contents")
     private List<ContentDto> contents;
 

@@ -40,6 +40,7 @@ public class Story {
 
     //mappedBY = "story" : StoryContent 엔티티에 있는 'story' 필드에 의해 관리된다
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sequence ASC")
     private List<StoryContent> content = new ArrayList<>();
 
     @Column(nullable = false)

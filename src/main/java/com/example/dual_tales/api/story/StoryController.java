@@ -52,4 +52,35 @@ public class StoryController {
     public List<StoryResponseDto> getFeedByLanguage(@RequestParam String langCode){
         return storyService.getPublicStoriesByLanguage(langCode);
     }
+
+    //DELETE : 동화 삭제
+    @DeleteMapping("/{storyId}")
+    @Operation(summary = "동화 삭제", description = "본인이 생성한 동화를 삭제합니다.")
+    public ResponseEntity<Void> deleteStory(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long storyId) {
+        storyService.deleteStory(user.getId(), storyId);
+        return ResponseEntity.ok().build();
+    }
+
+    //PATCH : 동화 제목 수정
+    @PatchMapping("/{storyId}/title")
+    @Operation(summary = "동화 제목 수정", description = "동화의 제목을 변경합니다.")
+    public ResponseEntity<Void> updateTitle(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long storyId,
+            @RequestParam String newTitle) {
+        storyService.updateStoryTitle(user.getId(), storyId, newTitle);
+        return ResponseEntity.ok().build();
+    }
+
+    //PATCH : 공개 여부 전환
+    @PatchMapping("/{storyId}/public")
+    @Operation(summary = "공개 여부 전환", description = "동화의 공개/비공개 상태를 토글합니다.")
+    public ResponseEntity<Void> togglePublic(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long storyId) {
+        storyService.toggleStoryPublic(user.getId(), storyId);
+        return ResponseEntity.ok().build();
+    }
 }
