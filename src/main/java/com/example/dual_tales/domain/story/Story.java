@@ -44,5 +44,5 @@ public class Story {
     private List<StoryContent> content = new ArrayList<>();
 
     @Column(nullable = false)
-    private boolean isPublic = true;
+    private boolean isPublic = false;
 }

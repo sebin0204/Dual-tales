@@ -21,9 +21,13 @@ public class StoryService {
     private final StoryRepository storyRepository;
     private final StoryContentRepository storyContentRepository;
 
-    //동화 생성
+    //동화 생성(최종 답변 저장시 호출)
     @Transactional
     public Long createStory(User user, StoryCreateRequestDto requestDto) {
+        //데이터 무결성 검사
+        if(requestDto.getPageCount() != requestDto.getContents().size()) {
+            throw new IllegalArgumentException("설정된 페이지 수와 실제 데이터 개수가 일치하지 않습니다.");
+        }
         //1. 부모엔티티(Story) 생성 및 저장
         Story story = Story.builder()
                 .user(user)
@@ -32,7 +36,7 @@ public class StoryService {
                 .targetAge(requestDto.getTargetAge())
                 .page_count(requestDto.getPageCount())
                 .status("COMPLETED")
-                .isPublic(true)
+                .isPublic(false)
                 .build();
 
         Story savedStory = storyRepository.save(story);
