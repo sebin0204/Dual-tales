@@ -28,6 +28,9 @@ public class Story {
     private User user; //JPA 방식(아이디만 가져오는것이 아니라, user 속 모든 정보를 들고있게 함)
 
     private String title;
+
+    @Column(name="cover_image", length = 1000)
+    private String cover_image;
     private String targetLangCode; //모국어 코드(ex: en, vi 등)
     private String status;
     private int targetAge;

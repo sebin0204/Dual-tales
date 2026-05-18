@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class StoryResponseDto {
     private Long id;
     private String title;
+    private String coverImageUrl;
     private String targetLangCode;
     private int targetAge;
     private int page_count;
@@ -18,6 +19,7 @@ public class StoryResponseDto {
     public StoryResponseDto(Story story) {
         this.id = story.getId();
         this.title = story.getTitle();
+        this.coverImageUrl = story.getCover_image();
         this.targetLangCode = story.getTargetLangCode();
         this.targetAge = story.getTargetAge();
         this.page_count = story.getPage_count();

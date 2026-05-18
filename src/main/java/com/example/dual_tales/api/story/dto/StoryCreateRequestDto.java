@@ -1,6 +1,7 @@
 package com.example.dual_tales.api.story.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,9 +9,14 @@ import java.util.List;
 
 //AI가 최종적으로 만들어서 던져줄 동화 DTO
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class StoryCreateRequestDto {
+    private Long draftId;
     private String title;
+
+    @JsonProperty("cover_image_url")
+    private String cover_image_url;
     @JsonProperty("target_lang_code")
     private String targetLangCode;
     @JsonProperty("target_age")
@@ -21,6 +27,7 @@ public class StoryCreateRequestDto {
     private List<ContentDto> contents;
 
     @Getter
+    @AllArgsConstructor
     @NoArgsConstructor
     public static class ContentDto {
         private int sequence;
