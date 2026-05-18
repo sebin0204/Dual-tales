@@ -36,5 +36,4 @@ public class StoryDraftController {
         StoryDraftResponseDto response = storyDraftService.proceedDraft(user, draftId, dto.getUserAnswer());
         return ResponseEntity.ok(response);
     }
-            )
 }
