@@ -1,6 +1,7 @@
 package com.example.dual_tales.domain.story_content;
 
 import com.example.dual_tales.domain.story.Story;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,11 +31,12 @@ public class StoryContent {
     @Column(columnDefinition = "TEXT")
     private String answer;
 
-    @Column(columnDefinition = "TEXT")
-    private String content_ko; //한국어 문장
+    @Column(name = "content_ko", columnDefinition = "TEXT")
+    private String contentKo; //한국어 문장
 
-    @Column(columnDefinition = "TEXT")
-    private String content_foreign; //외국어 문장
+    @Column(name = "content_foreign", columnDefinition = "TEXT")
+    private String contentForeign; //외국어 문장
 
-    private String image_url; //삽화 경로
+    @Column(name = "image_url", length=1000)
+    private String imageUrl; //삽화 경로
 }

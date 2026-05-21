@@ -24,11 +24,15 @@ public class StoryDraft extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String history; //지금까지 오간 질문/답변을 JSON으로 저장
 
+    @Column(columnDefinition = "TEXT")
+    private String storyState;
+
     private String targetLangCode;
     private int targetAge;
 
-    public void updateStep(int nextStep, String updatedHistory) {
+    public void updateStep(int nextStep, String updatedHistory, String storyState) {
         this.currentStep = nextStep;
         this.history = updatedHistory;
+        this.storyState = storyState;
     }
 }

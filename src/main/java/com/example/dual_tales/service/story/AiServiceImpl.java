@@ -2,33 +2,54 @@ package com.example.dual_tales.service.story;
 
 import com.example.dual_tales.global.infrastructure.ai.AIResponse;
 import com.example.dual_tales.global.infrastructure.ai.FinalStoryResponse;
+import com.example.dual_tales.global.infrastructure.ai.GeminiAiClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class AiServiceImpl implements AiService {
 
+    private final GeminiAiClient geminiAiClient;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
-    public AIResponse generateFirstQuestion(String langCode, int age) {
-        return new AIResponse("어떤 동물을 주인공으로 할까요?", "Which animal do you want?", false);
+    public AIResponse generateFirstQuestion(Map<String, Object> requestBody) {
+        try {
+            //AI 서버 호출
+            ResponseEntity<String> response = geminiAiClient.callAiServer(requestBody);
+            //받은 JSON 문자열을 AIResponse 객체로 파싱해서 리턴
+            return objectMapper.readValue(response.getBody(), AIResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException("AI 첫 질문 요청 실패", e);
+        }
     }
 
     @Override
-    public AIResponse getNextQuestion(String history, String langCode) {
-        // 임시로 false 반환 (테스트 시 최종 단계로 가려면 true로 바꿔서 테스트해보세요!)
-        return new AIResponse("그 친구의 이름은 무엇인가요?", "What is its name?", false);
+    public AIResponse getNextQuestion(Map<String, Object> requestBody) {
+        try {
+            //AI 서버 호출
+            ResponseEntity<String> response = geminiAiClient.callAiServer(requestBody);
+            //받은 JSON 문자열을 AIResponse 객체로 파싱해서 리턴
+            return objectMapper.readValue(response.getBody(), AIResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException("AI 다음 질문 요청 실패", e);
+        }
     }
 
     @Override
-    public FinalStoryResponse generateFinalStory(String fullHistory, String langCode) {
-        // 최종 원고 가짜 데이터 생성
-        List<FinalStoryResponse.PageContent> mockPages = List.of(
-                new FinalStoryResponse.PageContent(1, "작은 물고기가 살았어요.", "A little fish lived here.", "https://example.com/image1.png"),
-                new FinalStoryResponse.PageContent(2, "바다로 여행을 떠났죠.", "It went on a sea trip.", "https://example.com/image2.png")
-        );
-        return new FinalStoryResponse("물고기의 모험", "https://example.com/cover.png", langCode, 6, 2, mockPages);
+    public FinalStoryResponse generateFinalStory(Map<String, Object> requestBody) {
+        try {
+            ResponseEntity<String> response = geminiAiClient.callAiServer(requestBody);
+            //최종 동화 데이터 포멧(FinalStoryResponnse)로 파싱해서 리턴
+            return objectMapper.readValue(response.getBody(), FinalStoryResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException("AI 최종 동화 생성 요청 실패", e);
+        }
     }
 }
