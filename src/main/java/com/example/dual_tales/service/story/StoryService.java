@@ -46,9 +46,9 @@ public class StoryService {
                 .map(dto ->StoryContent.builder()
                         .story(savedStory)
                         .sequence(dto.getSequence())
-                        .content_ko(dto.getContent_ko())
-                        .content_foreign(dto.getContent_foreign())
-                        .image_url(dto.getImage_url())
+                        .contentKo(dto.getContent_ko())
+                        .contentForeign(dto.getContent_foreign())
+                        .imageUrl(dto.getImage_url())
                         .build())
                 .toList();
 

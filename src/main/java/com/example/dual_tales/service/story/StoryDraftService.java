@@ -133,7 +133,7 @@ public class StoryDraftService {
         }
 
         // 5) 아직 대화가 끝나지 않은 경우 (isFinal == false)
-        // 🚨 변수 유효 범위 문제 해결: 이 블록 안에서 안전하게 선언하고 사용합니다!
+        // 변수 유효 범위 문제 해결: 이 블록 안에서 안전하게 선언하고 사용
         int nextStep = draft.getCurrentStep() + 1;
         String updateHistory = currentHistory + "\nQ" + nextStep + "(KO): " + aiResponse.getQuestionKo();
 

@@ -18,8 +18,8 @@ public class StoryContentResponseDto {
         this.question_ko = content.getQuestion_ko();
         this.question_foreign = content.getQuestion_foreign();
         this.answer = content.getAnswer();
-        this.content_ko = content.getContent_ko();
-        this.content_foreign = content.getContent_foreign();
-        this.image_url = content.getImage_url();
+        this.content_ko = content.getContentKo();
+        this.content_foreign = content.getContentForeign();
+        this.image_url = content.getImageUrl();
     }
 }
