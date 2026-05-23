@@ -9,7 +9,7 @@ steps:
       - 'build'
       - '-t'
       - 'asia-northeast3-docker.pkg.dev/$PROJECT_ID/dual-tales-repo/dual-tales-backend:latest'
-      - '-'
+      - '.'
 
   # 구글 Artifact Registry(저장소)에 이미지 푸시
   - name: 'gcr.io/cloud-builders/docker'
