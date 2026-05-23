@@ -1,7 +1,6 @@
 spring:
   datasource:
-    # localhost 주소를 지우고, 구글 Secret Manager 금고에서 주입되는 환경변수들을 조합한 구글 전용 주소로 바꿉니다!
-    url: jdbc:mysql:///${DB_NAME}?cloudSqlInstance=${DB_HOST}&socketFactory=com.google.cloud.sql.mysql.SocketFactory&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://google/${DB_NAME}?cloudSqlInstance=${DB_HOST}&socketFactory=com.google.cloud.sql.mysql.SocketFactory&serverTimezone=Asia/Seoul&useSSL=false
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
