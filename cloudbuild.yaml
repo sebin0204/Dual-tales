@@ -1,7 +1,7 @@
 steps:
   # 구글클라우드 환경에서 Gradle을 이용해 자동으로 JAR 빌드 수행
   - name: 'gradle:8.5-jdk17'
-    args: ['clean', 'bootJar']
+    args: ['gradle', 'clean', 'bootJar']
 
   # Dockerfile을 읽어서 도커 이미지 빌드
   - name: 'gcr.io/cloud-builders/docker'
