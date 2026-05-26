@@ -14,7 +14,8 @@ public class GeminiAiClient {
     private final RestTemplate restTemplate = new RestTemplate();
 
     // AI API 엔드포인트 주소
-    private final String AI_SERVER_URL = "https://story-generator-976960175902.asia-northeast3.run.app";
+    @org.springframework.beans.factory.annotation.Value("${BASE_URL:https://story-generator-976960175902.asia-northeast3.run.app}")
+    private String AI_SERVER_URL;
 
     public ResponseEntity<String> callAiServer(Map<String, Object> requestBody) {
         HttpHeaders headers = new HttpHeaders();
