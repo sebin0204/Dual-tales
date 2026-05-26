@@ -7,10 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class StoryDraftCreateRequest {
-
-    @JsonProperty("request_type")
-    private final String requestType = "QUESTION";
-
     @JsonProperty("target_lang_code")
     private String targetLangCode;
 
