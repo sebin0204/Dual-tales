@@ -17,22 +17,19 @@ public class GeminiAiClient {
     @Value("${ai.api.key}")
     private String apiKey;
 
-    // GeminiAiClient.java 파일 내부의 주소 변수를 꼭 이걸로 교체해 주세요!
+    // AI 담당자 팀원분의 진짜 파이썬 서버 API 엔드포인트 주소
     private final String AI_SERVER_URL = "https://dual-tales-service-771416002545.asia-northeast3.run.app/v1/ai/generate";
 
     public ResponseEntity<String> callAiServer(Map<String, Object> requestBody) {
-        // 1. 헤더 설정 (제미나이는 Authorization Bearer 헤더 대신 URL 파라미터로 키를 받으므로 content-type만 설정합니다)
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + apiKey);
 
         // 2. 요청 본문과 헤더 합치기
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-        String finalUrl = AI_SERVER_URL + "?key=" + apiKey;
-
-        // 4. 완성된 절대 주소(finalUrl)로 AI 서버에 POST 요청 날리기!
         return restTemplate.exchange(
-                finalUrl,
+                AI_SERVER_URL,
                 HttpMethod.POST,
                 entity,
                 String.class
