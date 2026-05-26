@@ -17,24 +17,24 @@ public class GeminiAiClient {
     @Value("${ai.api.key}")
     private String apiKey;
 
-    private final String AI_SERVER_URL = "";
+    private final String AI_SERVER_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
     public ResponseEntity<String> callAiServer(Map<String, Object> requestBody) {
-        // 1. 헤더 설정 (보안 키 및 JSON 타입 설정)
+        // 1. 헤더 설정 (제미나이는 Authorization Bearer 헤더 대신 URL 파라미터로 키를 받으므로 content-type만 설정합니다)
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + apiKey); // AI 담당자가 요구하는 헤더명으로 수정 가능
 
         // 2. 요청 본문과 헤더 합치기
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-        // 3. AI 서버로 POST 요청 날려서 응답 받아오기!
+        String finalUrl = AI_SERVER_URL + "?key=" + apiKey;
+
+        // 4. 완성된 절대 주소(finalUrl)로 AI 서버에 POST 요청 날리기!
         return restTemplate.exchange(
-                AI_SERVER_URL,
+                finalUrl,
                 HttpMethod.POST,
                 entity,
                 String.class
         );
     }
-
 }
