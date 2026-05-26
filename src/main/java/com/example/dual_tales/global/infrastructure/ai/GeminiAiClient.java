@@ -17,7 +17,8 @@ public class GeminiAiClient {
     @Value("${ai.api.key}")
     private String apiKey;
 
-    private final String AI_SERVER_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    // GeminiAiClient.java 파일 내부의 주소 변수를 꼭 이걸로 교체해 주세요!
+    private final String AI_SERVER_URL = "https://dual-tales-service-771416002545.asia-northeast3.run.app/v1/ai/generate";
 
     public ResponseEntity<String> callAiServer(Map<String, Object> requestBody) {
         // 1. 헤더 설정 (제미나이는 Authorization Bearer 헤더 대신 URL 파라미터로 키를 받으므로 content-type만 설정합니다)
