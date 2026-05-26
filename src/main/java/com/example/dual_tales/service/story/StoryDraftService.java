@@ -32,13 +32,14 @@ public class StoryDraftService {
     public StoryDraftResponseDto createDraft(User user, StoryDraftCreateRequest dto) {
         Map<String, Object> aiRequest = new HashMap<>();
 
-        aiRequest.put("request_type", "QUESTiON"); // 최초 요청을 뜻하는 문자열 (나현님 명세에 맞춤)
+        aiRequest.put("request_type", "QUESTION");
         aiRequest.put("target_lang_code", dto.getTargetLangCode());
         aiRequest.put("story_lang_code", "KO");
-        aiRequest.put("target_age", dto.getTargetAge()); // Integer 타입 유지
+        aiRequest.put("target_age", dto.getTargetAge());
         aiRequest.put("history", "");
-        aiRequest.put("user_answer", ""); // null 대신 빈 문자열로 안전하게 처리
-        aiRequest.put("story_state", new HashMap<String, Object>()); // null 대신 빈 { } 객체 처리
+        aiRequest.put("user_answer", "");
+
+        aiRequest.put("story_state", null);
         aiRequest.put("no_moral", false);
 
         AIResponse aiResponse = aiService.generateFirstQuestion(aiRequest);
@@ -84,14 +85,15 @@ public class StoryDraftService {
         }
 
         Map<String, Object> aiRequest = new HashMap<>();
-        aiRequest.put("request_type", "QUESTION"); // 대화 지속을 뜻하는 문자열
+        aiRequest.put("request_type", "QUESTION");
         aiRequest.put("target_lang_code", draft.getTargetLangCode());
         aiRequest.put("story_lang_code", "KO");
         aiRequest.put("target_age", draft.getTargetAge());
         aiRequest.put("history", currentHistory);
         aiRequest.put("user_answer", userAnswer);
-        aiRequest.put("story_state", savedStateMap != null ? savedStateMap : new HashMap<String, Object>());
-        aiRequest.put("no_moral", false); // 스웨거 필수 항목 누락 보완!
+
+        aiRequest.put("story_state", savedStateMap != null ? savedStateMap : null);
+        aiRequest.put("no_moral", false);
 
         // AI한테 지금까지의 히스토리를 보내서 다음 질문 요청
         AIResponse aiResponse = aiService.getNextQuestion(aiRequest);
