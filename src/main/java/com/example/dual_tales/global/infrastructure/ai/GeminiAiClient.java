@@ -14,7 +14,7 @@ public class GeminiAiClient {
     private final RestTemplate restTemplate = new RestTemplate();
 
     // AI API 엔드포인트 주소
-    private final String AI_SERVER_URL = "https://dual-tales-service-771416002545.asia-northeast3.run.app/v1/ai/generate";
+    private final String AI_SERVER_URL = "https://story-generator-976960175902.asia-northeast3.run.app";
 
     public ResponseEntity<String> callAiServer(Map<String, Object> requestBody) {
         HttpHeaders headers = new HttpHeaders();
@@ -25,7 +25,7 @@ public class GeminiAiClient {
 
         // 3. 주소 파라미터나 헤더 인증 없이, 순수하게 데이터 상자만 POST로 전달
         return restTemplate.exchange(
-                AI_SERVER_URL,
+                AI_SERVER_URL + "/v1/ai/generate",
                 HttpMethod.POST,
                 entity,
                 String.class
