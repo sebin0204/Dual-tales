@@ -102,6 +102,8 @@ public class StoryDraftService {
         if (aiResponse.isFinal()) {
             aiRequest.put("story_state", aiResponse.getStoryState());
 
+            aiRequest.put("request_type", "STORY");
+
             // AI에게 최종 완성본(StoryResponse) 요청
             FinalStoryResponse finalStory = aiService.generateFinalStory(aiRequest);
 
