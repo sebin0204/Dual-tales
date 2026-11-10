@@ -32,9 +32,9 @@ steps:
       - '--allow-unauthenticated'
 
       # 내 환경변수 및 시크릿 연동 매핑
-      # 명령어 실행시 구글 Secret Manager에 GEMINI_API_KEY가 등록되어있어야함
+      # 명령어 실행시 구글 Secret Manager에 GEMINI_API_KEY, JWT_SECRET이 등록되어있어야함
       - '--set-secrets'
-      - 'DB_HOST=DB_HOST:latest,DB_PORT=DB_PORT:latest,DB_NAME=DB_NAME:latest,DB_USERNAME=DB_USERNAME:latest,DB_PASSWORD=DB_PASSWORD:latest,GEMINI_API_KEY=GEMINI_API_KEY:latest'
+      - 'DB_HOST=DB_HOST:latest,DB_PORT=DB_PORT:latest,DB_NAME=DB_NAME:latest,DB_USERNAME=DB_USERNAME:latest,DB_PASSWORD=DB_PASSWORD:latest,GEMINI_API_KEY=GEMINI_API_KEY:latest,JWT_SECRET=JWT_SECRET:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY
