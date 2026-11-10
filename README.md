@@ -1,4 +1,3 @@
-  # 2026-Tales-Runner-ImpactUp
 # 📚 Dual Tales
 
 > 다문화 가정 아이와 부모가 함께 만드는 AI 이중언어 맞춤형 동화 서비스
@@ -78,6 +77,9 @@ Gemini API / Imagen 4
 <br>
 
 ## ⚙️ Backend
+
+> 🙋 **백엔드 개발 전담: [@sebin0204](https://github.com/sebin0204)** — ERD 설계, JWT 인증, 동화/인터뷰 API, AI 서버 연동, Cloud Run 배포
+> 자세한 내용은 [Backend README](./dual-tales-backend/README.md)를 참고해주세요.
 
 | 분류 | 내용 |
 |------|------|

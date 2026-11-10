@@ -1,68 +1,115 @@
-# 📚 Dual Tales - Backend Service
+# 📚 Dual Tales — Backend
 
-> **AI 기반 다문화 가정을 위한 이중언어 동화 제작 서비스**
-> 본 프로젝트는 **SDGs 4(양질의 교육)** 및 **SDGs 10(불평등 감소)** 가치를 실현하기 위해, 다문화 가정 내 언어 격차를 해소하고 아동의 문해력 향상을 돕는 AI 기반 이중언어 동화책 생성 플랫폼의 백엔드 서비스입니다.
+> 다문화 가정 아이와 부모가 함께 만드는 **AI 이중언어 맞춤형 동화 서비스**
+> GDG on Campus SWU · 2026 Impact Up 프로젝트 · 🌱 SDGs 4 양질의 교육 / 🤝 SDGs 10 불평등 감소
 
----
+| 항목 | 내용 |
+|---|---|
+| 기간 | 2026.04 ~ 2026.05 |
+| 역할 | **백엔드 개발 전담** (설계 · API 구현 · AI 서버 연동 · 배포) |
+| 기여 | 전체 57커밋 중 **49커밋** (+2,348 / −294 lines) |
+| 원본 레포 | [GDG-SWU/2026-Tales-Runner-ImpactUp-new-](https://github.com/GDG-SWU/2026-Tales-Runner-ImpactUp-new-) (GDG on Campus SWU 조직) |
+
+<br>
+
+## 📖 서비스 소개
+
+부모와 아이가 함께 인터뷰에 답하면, AI가 아이의 나이·관심사를 반영한 동화를 **한국어 + 부모 모국어** 두 언어로 생성하고 삽화까지 그려 줍니다.
+언어 차이로 생기는 교육 격차를 줄이고, 동화를 함께 읽으며 가족 간 대화를 늘리는 것이 목표입니다.
+
+<br>
 
 ## 🛠 Tech Stack
 
-* **Framework:** Java 17, Spring Boot 4.0.6, Spring Data JPA
-* **Database:** MySQL
-* **Build Tool:** Gradle
-* **Infrastructure:** Google Cloud Run, Cloud Build
-* **External API Interworking:** FastAPI (Python AI Server Engine)
+| 분류 | 기술 |
+|---|---|
+| Language / Framework | Java 17, Spring Boot 4.0.6, Spring Data JPA |
+| Security | Spring Security, JWT (jjwt 0.11.5), BCrypt |
+| Database | MySQL (Google Cloud SQL) |
+| Infra / Deploy | Docker, Google Cloud Build, Cloud Run |
+| API Docs | Swagger UI (springdoc-openapi 2.6.0) |
+| 연동 | FastAPI AI 서버 (Gemini 2.5 Flash, Imagen 4) |
 
----
+<br>
 
-## 🏗 System Architecture & Data Flow
-
-Spring Boot 프레임워크를 중심으로 동화 생성 엔진인 Python FastAPI 인프라와 느슨한 결합(Loose Coupling) 구조로 연동하여 안정적인 멀티 서비스 아키텍처를 구현했습니다.
-
-```
-[Android Client] 
-       │
-       ▼ (REST API)
-[Spring Boot Backend] ──(HTTP POST /v1/ai/generate)──► [FastAPI AI Engine]
-       │                                                      │
-       ▼ (Persistence)                                        ▼ (Gen-AI)
-  [MySQL DB]                                           [Gemini & Imagen API]
+## 🏗 Architecture
 
 ```
+Android App (Kotlin)
+        │  REST + JWT
+        ▼
+Spring Boot Backend ──── HTTP ───► FastAPI AI Server ──► Gemini / Imagen 4
+        │
+        ▼
+   Cloud SQL (MySQL)          ※ Backend: Cloud Build → Cloud Run 배포
+```
 
----
+<br>
 
-## 📊 Database ERD
+## 🙋 내가 한 일 (커밋 기록 기반)
 
----
+### 1. 프로젝트 세팅 & 도메인 설계 `04.29`
+- Spring Boot 프로젝트 초기 세팅, README 및 **ERD 작성**
+- ERD 기반 `User`, `Story`, `StoryContent` 엔티티·Repository 구현
 
-## 🚀 Key Features & Implementation Details
+### 2. 회원 인증 `04.29 ~ 05.04`
+- 회원가입 / 로그인 API, **BCrypt 비밀번호 암호화**
+- `JwtTokenProvider`, `JwtAuthenticationFilter`, `CustomUserDetailService`로 **JWT 인증** 구성
+- Swagger(OpenAPI) 설정 및 JWT 인증 헤더 연동
 
-### 1. 부모-자녀 대화 기반 스토리 빌더 (Story Draft 세션 관리)
+### 3. 동화 CRUD `04.30 ~ 05.05`
+- 언어별 공개 동화 피드(최신순), 내 동화 목록, 동화 상세(이중언어 본문 + 삽화) 조회
+- 동화 최종 저장, 삭제, 제목 수정, 공개 여부 변경 (작성자 권한 검증)
+- `page_count`, `question_ko`, `question_foreign` 필드 추가
 
-* **비동기 상태 유지를 위한 설계:** 최초 질문 요청(`QUESTION`)부터 사용자의 답변을 수집하여 연속적인 문맥 질문을 이어가는 멀티 턴(Multi-turn) 대화 흐름을 제어합니다.
-* **데이터 직렬화 및 복원:** AI 서버와의 매끄러운 세션 유지를 위해 고안된 컨텍스트 스냅샷 데이터(`story_state`)를 `Jackson ObjectMapper`를 활용하여 JSON String 포맷으로 직렬화한 뒤 MySQL에 동적으로 적재 및 복원합니다.
-* **대외 안정성 확보:** 클라이언트의 요청 상태에 따라 공백 문자 예외 처리 및 타입 검증 로직을 구현하여 입력 데이터의 유효성을 보장합니다.
+### 4. 인터뷰 기반 동화 생성 흐름 (StoryDraft) `05.14 ~ 05.21`
+- 질문/응답 API와 **중간 저장(StoryDraft)** 기능으로 멀티턴 인터뷰 상태 관리
+- AI 서버가 넘겨주는 `story_state`를 JSON으로 직렬화해 DB에 저장·복원
+- `AiClient` 인터페이스 → `MockAiClient`로 먼저 개발 후 `GeminiAiClient`로 교체
+- AI가 `isFinal`을 반환하면 최종 동화를 요청하고 `Story` / `StoryContent`로 변환해 저장, 사용한 Draft 삭제
 
-### 2. AI 기반 이중언어 동화책 최종 생성 및 무결성 검증
+### 5. 배포 & 연동 안정화 `05.23 ~ 05.26`
+- Dockerfile, `cloudbuild.yaml` 작성 → **Google Cloud Run 배포**
+- 빌드 환경 이슈 해결 (Java 17 런타임, Gradle 8.14), **Cloud SQL Socket Factory** 의존성 추가
+- 배포 후 CORS / SecurityConfig 수정, AI 서버 URL·헤더·엔드포인트 수정
+- AI 서버와 요청/응답 규격 통일 (`StoryDraftService` 매핑 흐름 정리)
 
-* **트랜잭션 기반 동화 최적화:** AI 서비스 인터페이스로부터 최종 완료(`isFinal: true`) 이벤트를 수신하면, 백엔드가 주도적으로 최종 동화책 생성을 요청(`STORY`)하여 수신된 원자적 데이터를 `Story` 및 `StoryContent` 엔티티로 변환 후 수동/자동 영속화(Persistence)를 수행합니다.
-* **엄격한 데이터 무결성 검사:** AI 엔진이 전달한 설정 페이지 수(`pageCount`)와 실제 영속화 계층에 도달한 데이터 개수(`contentSize`)를 상호 교차 검증하는 방어적 예외 처리 로직(`IllegalArgumentException`)을 구현했습니다.
-* **성공적인 가비지 컬렉션:** 최종 저장이 완료된 임시 드래프트 세션은 즉시 데이터베이스에서 삭제(`delete`) 처리하여 불필요한 스토리지 낭비를 원천 차단합니다.
+### 6. 모노레포 통합 `05.26 ~ 05.27`
+- 백엔드 레포를 `git subtree`로 `dual-tales-backend/`에 합치고 AI·Android 폴더 구조 세팅, README 정리
 
-### 3. 멀티랭귀지 번역 및 미디어 자원 매핑
+<br>
 
-* **이중언어 동시 서빙:** 다문화 가정의 특성을 고려하여 한국어(`KO`) 본문 데이터와 사용자 설정 타깃 모국어(예: `EN` 등)가 정교하게 매핑된 이중언어 텍스트 데이터를 프론트엔드에 확장성 있는 DTO 구조로 포맷팅하여 전달합니다.
-* **CDN 및 미디어 매핑:** Imagen 및 Gemini를 통해 실시간으로 렌더링된 고화질 동화 삽화 및 표지 이미지 원격 자원 URL을 가공하여 상세 조회(`GET /api/stories/{id}`) 요청 시 모바일 클라이언트가 즉각 렌더링할 수 있도록 고성능 인덱싱 구조를 지원합니다.
+## 🔍 API
 
----
+| Method | Endpoint | 설명 |
+|---|---|---|
+| POST | `/api/users/signup` | 회원가입 |
+| POST | `/api/users/login` | 로그인 (JWT 발급) |
+| POST | `/api/stories/draft` | 인터뷰 시작 · 첫 질문 생성 |
+| PATCH | `/api/stories/draft/{draftId}` | 답변 전송 → 다음 질문 or 최종 동화 생성 |
+| POST | `/api/stories` | 동화 최종 저장 |
+| GET | `/api/stories/my` | 내 동화 목록 |
+| GET | `/api/stories/{storyId}` | 동화 상세 (이중언어 본문 + 삽화) |
+| GET | `/api/stories/feed` | 언어별 공개 동화 피드 (최신순) |
+| DELETE | `/api/stories/{storyId}` | 동화 삭제 |
+| PATCH | `/api/stories/{storyId}/title` | 제목 수정 |
+| PATCH | `/api/stories/{storyId}/public` | 공개 여부 변경 |
 
-## 🔍 API Specification (Core)
+<br>
 
-| Method | End Point | Description | Status |
-| --- | --- | --- | --- |
-| **POST** | `/api/story-drafts` | 최초 대화 및 드래프트 동화 생성 시작 | `201 Created` |
-| **POST** | `/api/story-drafts/{id}/proceed` | 사용자 답변 전송 및 다음 턴 질문/최종본 수신 | `200 OK` |
-| **GET** | `/api/stories` | 유저가 생성 완료한 동화책 전체 목록 조회 | `200 OK` |
-| **GET** | `/api/stories/{id}` | 특정 동화책 상세 조회 (이중언어 본문 및 AI 삽화 포함) | `200 OK` |
-| **POST** | `/api/stories` | 외부 및 테스트용 동화책 직접 수동 생성 수신 | `201 Created` |
+## 📁 구조
+
+```
+dual-tales-backend/src/main/java/com/example/dual_tales
+├── api          # Controller, DTO (user / story / story_content)
+├── domain       # Entity, Repository (user / story / story_content / story_draft)
+├── service      # UserService, StoryService, StoryDraftService, AiService
+└── global       # config(Security, OpenAPI), security(JWT), infrastructure/ai(AI 클라이언트)
+```
+
+<br>
+
+## 💡 배운 점
+- AI 서버가 늦게 준비되는 상황에서 **인터페이스 + Mock 구현**으로 먼저 개발하고 나중에 실제 구현으로 바꾸는 방식의 장점을 경험했습니다.
+- 외부 서버와 연동할 때는 **요청/응답 규격(필드명, 대소문자, 타입)을 먼저 합의**해야 디버깅 시간을 줄일 수 있다는 것을 배웠습니다.
+- Cloud Run + Cloud SQL 배포 과정에서 빌드 환경, 시크릿 주입, CORS 등 실제 배포 이슈를 직접 해결해 봤습니다.
